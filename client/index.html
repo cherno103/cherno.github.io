@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная - Minecraft Сервер</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+                   style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+                   font-src 'self' https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https:;
+                   connect-src 'self' http://localhost:3000;
+                   frame-ancestors 'none';
+                   form-action 'self' https://payment.provider.com;">
+    
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-cube fa-2x"></i>
+                        <h1>Minecraft Сервер</h1>
+                    </a>
+                </div>
+                <div class="header-actions">
+                    <div class="server-ip" id="copyIp">
+                        <i class="fas fa-server"></i>
+                        <span>play.myserver.com</span>
+                    </div>
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <i class="fas fa-user"></i>
+                            <span id="userBtnText">Войти</span>
+                        </button>
+                        <div class="dropdown-menu" id="userDropdown">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i> Мой профиль
+                            </a>
+                            <a href="history.html" class="dropdown-item">
+                                <i class="fas fa-shopping-bag"></i> Мои покупки
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logoutLink">
+                                <i class="fas fa-sign-out-alt"></i> Выйти
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="shop.html" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i> Магазин
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fas fa-user"></i> Профиль
+                </a>
+                <a href="login.html" class="nav-link">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Добро пожаловать на наш Minecraft сервер!</h1>
+                <p>Присоединяйтесь к тысячам игроков и окунитесь в удивительный мир приключений</p>
+                
+                <div class="hero-actions">
+                    <a href="shop.html" class="btn-primary btn-large">
+                        <i class="fas fa-gem"></i> Перейти в магазин
+                    </a>
+                    <a href="#features" class="btn-secondary btn-large">
+                        <i class="fas fa-info-circle"></i> Узнать больше
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Стабильный сервер</h3>
+                    <p>99.9% аптайм, мощное железо, защита от лагов и DDoS-атак</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Активное комьюнити</h3>
+                    <p>Более 5000 активных игроков, дружелюбная атмосфера</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Уникальные режимы</h3>
+                    <p>Выживание, Креатив, Миниигры, РП режимы и многое другое</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Защита и безопасность</h3>
+                    <p>Античит, защита от гриферов, модерация 24/7</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">Статистика сервера</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="onlinePlayers">1,234</div>
+                    <div class="stat-label">Игроков онлайн</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPlayers">25,678</div>
+                    <div class="stat-label">Всего игроков</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number" id="serverUptime">99.9%</div>
+                    <div class="stat-label">Аптайм сервера</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number" id="daysRunning">365+</div>
+                    <div class="stat-label">Дней работы</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Присоединяйся к нам!</h2>
+                <p>Начни свое приключение прямо сейчас. Поддержи развитие сервера и получи эксклюзивные возможности</p>
+                
+                <div class="cta-actions">
+                    <a href="shop.html" class="btn-primary btn-large">
+                        <i class="fas fa-crown"></i> Купить привилегию
+                    </a>
+                    <a href="#" class="btn-secondary btn-large" id="howToConnect">
+                        <i class="fas fa-question-circle"></i> Как подключиться?
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Быстрые ссылки</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="shop.html"><i class="fas fa-shopping-cart"></i> Магазин</a></li>
+                        <li><a href="profile.html"><i class="fas fa-user"></i> Профиль</a></li>
+                        <li><a href="history.html"><i class="fas fa-history"></i> История покупок</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-discord"></i> Discord сервер
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-vk"></i> Группа ВКонтакте
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-envelope"></i> support@myserver.com
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Способы оплаты</h3>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <i class="fab fa-cc-visa"></i> Visa
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-mastercard"></i> Mastercard
+                        </div>
+                        <div class="payment-method sbp">
+                            <i class="fas fa-mobile-alt"></i> СБП
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px; color: #8a9bb2; font-size: 0.9rem;">
+                        Платежи обрабатываются через UnitPay
+                    </p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Minecraft Сервер. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновление статистики
+            function updateStats() {
+                const onlinePlayers = document.getElementById('onlinePlayers');
+                const totalPlayers = document.getElementById('totalPlayers');
+                
+                const baseOnline = 1200;
+                const randomOnline = Math.floor(Math.random() * 100);
+                onlinePlayers.textContent = (baseOnline + randomOnline).toLocaleString();
+                
+                const baseTotal = 25600;
+                const randomTotal = Math.floor(Math.random() * 500);
+                totalPlayers.textContent = (baseTotal + randomTotal).toLocaleString();
+            }
+            
+            updateStats();
+            setInterval(updateStats, 60000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Minecraft Сервер</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Preload -->
+    <link rel="preload" href="js/validation.js" as="script">
+    <link rel="preload" href="js/app.js" as="script">
+</head>
+<body class="no-copy">
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-cube"></i>
+                    <h1>Minecraft Сервер</h1>
+                </a>
+                
+                <div class="header-actions">
+                    <div class="server-ip" id="copyIp">
+                        <i class="fas fa-server"></i>
+                        <span>play.myserver.com</span>
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <i class="fas fa-user"></i>
+                            <span id="userBtnText">Профиль</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        
+                        <div class="dropdown-menu" id="userDropdown">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Профиль</span>
+                            </a>
+                            <a href="history.html" class="dropdown-item">
+                                <i class="fas fa-history"></i>
+                                <span>История покупок</span>
+                            </a>
+                            <a href="shop.html" class="dropdown-item">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Магазин</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logoutLink">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Выйти</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Главная</span>
+                </a>
+                <a href="shop.html" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Магазин</span>
+                </a>
+                <a href="profile.html" class="nav-link active">
+                    <i class="fas fa-user"></i>
+                    <span>Профиль</span>
+                </a>
+                <a href="history.html" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    <span>История</span>
+                </a>
+                <a href="index.html#support" class="nav-link">
+                    <i class="fas fa-headset"></i>
+                    <span>Поддержка</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="profile-container">
+            <!-- Loading State -->
+            <div id="profileLoading" class="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Загрузка профиля...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="profileError" style="display: none; text-align: center; padding: 50px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #dc3545; margin-bottom: 20px;"></i>
+                <h3>Ошибка загрузки профиля</h3>
+                <p>Пожалуйста, войдите в систему</p>
+                <a href="login.html" class="btn-primary mt-3">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </a>
+            </div>
+            
+            <!-- Profile Content -->
+            <div id="profileContent" style="display: none;">
+                <!-- Profile Header -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 id="profileNickname">Загрузка...</h2>
+                        <p class="text-secondary" id="profileEmail">Загрузка...</p>
+                        <div class="profile-badges">
+                            <span class="badge" id="memberSince">Участник с: Загрузка...</span>
+                            <span class="badge" id="lastLogin">Последний вход: Загрузка...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="totalSpent">0 ₽</div>
+                            <div class="profile-stat-label">Всего потрачено</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="purchasesCount">0</div>
+                            <div class="profile-stat-label">Покупок</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="accountAge">0 д.</div>
+                            <div class="profile-stat-label">Аккаунту</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="lastPurchase">Нет</div>
+                            <div class="profile-stat-label">Последняя покупка</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Form -->
+                <div class="profile-card mt-4">
+                    <h3><i class="fas fa-cog"></i> Настройки профиля</h3>
+                    
+                    <form id="profileForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profileGameNickname">
+                                    <i class="fas fa-gamepad"></i>
+                                    Игровой никнейм
+                                </label>
+                                <input type="text" id="profileGameNickname" autocomplete="nickname" placeholder="Введите ваш ник в Minecraft">
+                                <small>Этот ник будет использоваться для выдачи купленных товаров</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileGameServer">
+                                    <i class="fas fa-server"></i>
+                                    Игровой сервер
+                                </label>
+                                <select id="profileGameServer">
+                                    <option value="main">Основной сервер</option>
+                                    <option value="hard">Хардкор</option>
+                                    <option value="creative">Креатив</option>
+                                    <option value="minigames">Мини-игры</option>
+                                </select>
+                                <small>На каком сервере вы обычно играете?</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Honeypot field -->
+                        <input type="text" id="profile_bot_check" name="profile_bot_check" style="display: none;" autocomplete="off">
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancelChanges">
+                                <i class="fas fa-times"></i>
+                                Отмена
+                            </button>
+                            <button type="submit" class="btn-primary" id="saveProfile">
+                                <i class="fas fa-save"></i>
+                                Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Security Settings -->
+                <div class="profile-card mt-4">
+                    <h3><i class="fas fa-shield-alt"></i> Безопасность</h3>
+                    
+                    <div class="security-settings">
+                        <div class="security-item">
+                            <div class="security-info">
+                                <h4><i class="fas fa-envelope"></i> Email подтвержден</h4>
+                                <p id="emailConfirmedStatus">Загрузка...</p>
+                            </div>
+                            <button class="btn-secondary" id="verifyEmail" disabled>
+                                <i class="fas fa-check-circle"></i>
+                                Подтвердить
+                            </button>
+                        </div>
+                        
+                        <div class="security-item">
+                            <div class="security-info">
+                                <h4><i class="fas fa-lock"></i> Сменить пароль</h4>
+                                <p>Обновите ваш пароль для повышения безопасности</p>
+                            </div>
+                            <button class="btn-secondary" id="changePassword">
+                                <i class="fas fa-key"></i>
+                                Изменить
+                            </button>
+                        </div>
+                        
+                        <div class="security-item">
+                            <div class="security-info">
+                                <h4><i class="fas fa-mobile-alt"></i> Двухфакторная аутентификация</h4>
+                                <p id="twoFactorStatus">Не настроена</p>
+                            </div>
+                            <button class="btn-secondary" id="toggle2FA" disabled>
+                                <i class="fas fa-toggle-off"></i>
+                                Включить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Purchases -->
+                <div class="profile-card mt-4">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Последние покупки</h3>
+                        <a href="history.html" class="btn-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Вся история
+                        </a>
+                    </div>
+                    
+                    <div id="recentPurchasesLoading" class="loading" style="display: none;">
+                        <div class="loading-spinner-small"></div>
+                        <p>Загрузка покупок...</p>
+                    </div>
+                    
+                    <div id="noPurchases" style="display: none; text-align: center; padding: 30px;">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #8a9bb2; margin-bottom: 15px;"></i>
+                        <h4>Покупок пока нет</h4>
+                        <p>Совершите первую покупку в нашем магазине!</p>
+                        <a href="shop.html" class="btn-primary mt-2">
+                            <i class="fas fa-store"></i>
+                            Перейти в магазин
+                        </a>
+                    </div>
+                    
+                    <div class="purchases-list" id="recentPurchases">
+                        <!-- Purchases will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-key"></i>
+                <h3>Смена пароля</h3>
+                <button class="modal-close" id="closePasswordModal">&times;</button>
+            </div>
+            
+            <form id="passwordForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="currentPassword">
+                            <i class="fas fa-lock"></i>
+                            Текущий пароль
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="currentPassword" required autocomplete="current-password">
+                            <button type="button" class="toggle-password" data-target="currentPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">
+                            <i class="fas fa-lock"></i>
+                            Новый пароль
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="newPassword" required autocomplete="new-password">
+                            <button type="button" class="toggle-password" data-target="newPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-requirements">
+                            <small>Новый пароль должен содержать:</small>
+                            <ul>
+                                <li id="new-req-length">Минимум 8 символов</li>
+                                <li id="new-req-uppercase">Заглавную букву</li>
+                                <li id="new-req-lowercase">Строчную букву</li>
+                                <li id="new-req-number">Цифру</li>
+                                <li id="new-req-special">Специальный символ</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmNewPassword">
+                            <i class="fas fa-lock"></i>
+                            Подтверждение нового пароля
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="confirmNewPassword" required autocomplete="new-password">
+                            <button type="button" class="toggle-password" data-target="confirmNewPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Honeypot field -->
+                    <input type="text" id="password_bot_check" name="password_bot_check" style="display: none;" autocomplete="off">
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelPasswordChange">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        Сохранить новый пароль
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Minecraft Сервер</h3>
+                    <p>Лучший Minecraft сервер с уникальными модами, ивентами и дружным комьюнити.</p>
+                    <div class="security-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Все данные защищены шифрованием
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Главная</a></li>
+                        <li><a href="shop.html"><i class="fas fa-chevron-right"></i> Магазин</a></li>
+                        <li><a href="profile.html"><i class="fas fa-chevron-right"></i> Профиль</a></li>
+                        <li><a href="history.html"><i class="fas fa-chevron-right"></i> История</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Поддержка</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://discord.gg/myserver" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i> Discord сервер
+                        </a></li>
+                        <li><a href="mailto:support@myserver.com">
+                            <i class="fas fa-envelope"></i> support@myserver.com
+                        </a></li>
+                        <li><a href="#faq">
+                            <i class="fas fa-question-circle"></i> Частые вопросы
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Minecraft Сервер. Все права защищены.
+                </div>
+                <div class="footer-links-small">
+                    <a href="#privacy">Политика конфиденциальности</a>
+                    <a href="#terms">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="js/validation.js" defer></script>
+    <script src="js/app.js" defer></script>
+    
+    <!-- Inline script для страницы профиля -->
+    <script>
+        (function() {
+            // Состояние формы
+            let originalData = {};
+            let isEditing = false;
+            
+            document.addEventListener('DOMContentLoaded', async function() {
+                // Загружаем профиль
+                await loadProfile();
+                
+                // Инициализация
+                setupEventHandlers();
+                setupPasswordValidation();
+                
+                // Проверка авторизации
+                checkAuth();
+            });
+            
+            // Проверка авторизации
+            async function checkAuth() {
+                if (window.App && window.App.checkAuth) {
+                    const isAuthenticated = await window.App.checkAuth();
+                    if (!isAuthenticated) {
+                        showErrorState();
+                    }
+                }
+            }
+            
+            // Показать состояние ошибки
+            function showErrorState() {
+                document.getElementById('profileLoading').style.display = 'none';
+                document.getElementById('profileContent').style.display = 'none';
+                document.getElementById('profileError').style.display = 'block';
+            }
+            
+            // Загрузка профиля
+            async function loadProfile() {
+                const loadingEl = document.getElementById('profileLoading');
+                const contentEl = document.getElementById('profileContent');
+                const errorEl = document.getElementById('profileError');
+                
+                if (loadingEl) loadingEl.style.display = 'flex';
+                if (contentEl) contentEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'none';
+                
+                try {
+                    if (window.App && window.App.safeFetch) {
+                        const profile = await window.App.safeFetch(`${window.App.API_BASE_URL}/api/user/profile`);
+                        
+                        if (profile) {
+                            updateProfileUI(profile);
+                            loadRecentPurchases();
+                            
+                            if (loadingEl) loadingEl.style.display = 'none';
+                            if (contentEl) contentEl.style.display = 'block';
+                            
+                            // Сохраняем оригинальные данные
+                            originalData = {
+                                gameNickname: profile.game_nickname || '',
+                                gameServer: profile.game_server || 'main'
+                            };
+                            
+                            // Устанавливаем значения в форму
+                            const nicknameInput = document.getElementById('profileGameNickname');
+                            const serverSelect = document.getElementById('profileGameServer');
+                            
+                            if (nicknameInput) nicknameInput.value = originalData.gameNickname;
+                            if (serverSelect) serverSelect.value = originalData.gameServer;
+                        } else {
+                            showErrorState();
+                        }
+                    } else {
+                        showErrorState();
+                    }
+                } catch (error) {
+                    console.error('Error loading profile:', error);
+                    showErrorState();
+                }
+            }
+            
+            // Обновление UI профиля
+            function updateProfileUI(profile) {
+                // Основная информация
+                const nicknameEl = document.getElementById('profileNickname');
+                const emailEl = document.getElementById('profileEmail');
+                const memberSinceEl = document.getElementById('memberSince');
+                const lastLoginEl = document.getElementById('lastLogin');
+                
+                if (nicknameEl) nicknameEl.textContent = profile.nickname || 'Игрок';
+                if (emailEl) emailEl.textContent = profile.email || 'Email скрыт';
+                
+                if (profile.created_at && memberSinceEl) {
+                    const createdDate = new Date(profile.created_at);
+                    memberSinceEl.textContent = `Участник с: ${createdDate.toLocaleDateString('ru-RU')}`;
+                }
+                
+                if (profile.last_login && lastLoginEl) {
+                    const lastLoginDate = new Date(profile.last_login);
+                    lastLoginEl.textContent = `Последний вход: ${lastLoginDate.toLocaleDateString('ru-RU')}`;
+                }
+                
+                // Статистика
+                const totalSpentEl = document.getElementById('totalSpent');
+                const purchasesCountEl = document.getElementById('purchasesCount');
+                const accountAgeEl = document.getElementById('accountAge');
+                const lastPurchaseEl = document.getElementById('lastPurchase');
+                
+                if (totalSpentEl) totalSpentEl.textContent = `${profile.total_spent || 0} ₽`;
+                if (purchasesCountEl) purchasesCountEl.textContent = profile.purchases_count || 0;
+                
+                if (profile.created_at && accountAgeEl) {
+                    const created = new Date(profile.created_at);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - created);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    accountAgeEl.textContent = `${diffDays} д.`;
+                }
+                
+                if (profile.last_purchase && lastPurchaseEl) {
+                    const lastPurchaseDate = new Date(profile.last_purchase);
+                    lastPurchaseEl.textContent = lastPurchaseDate.toLocaleDateString('ru-RU');
+                } else if (lastPurchaseEl) {
+                    lastPurchaseEl.textContent = 'Нет';
+                }
+                
+                // Статус подтверждения email
+                const emailConfirmedEl = document.getElementById('emailConfirmedStatus');
+                if (emailConfirmedEl) {
+                    if (profile.email_confirmed) {
+                        emailConfirmedEl.textContent = 'Да';
+                        emailConfirmedEl.style.color = '#28a745';
+                    } else {
+                        emailConfirmedEl.textContent = 'Нет';
+                        emailConfirmedEl.style.color = '#dc3545';
+                    }
+                }
+                
+                // Статус 2FA
+                const twoFactorEl = document.getElementById('twoFactorStatus');
+                const toggle2FABtn = document.getElementById('toggle2FA');
+                if (twoFactorEl && toggle2FABtn) {
+                    if (profile.two_factor_enabled) {
+                        twoFactorEl.textContent = 'Включена';
+                        twoFactorEl.style.color = '#28a745';
+                        toggle2FABtn.innerHTML = '<i class="fas fa-toggle-on"></i> Выключить';
+                    } else {
+                        twoFactorEl.textContent = 'Не настроена';
+                        twoFactorEl.style.color = '#8a9bb2';
+                        toggle2FABtn.innerHTML = '<i class="fas fa-toggle-off"></i> Включить';
+                    }
+                }
+            }
+            
+            // Загрузка последних покупок
+            async function loadRecentPurchases() {
+                const loadingEl = document.getElementById('recentPurchasesLoading');
+                const noPurchasesEl = document.getElementById('noPurchases');
+                const purchasesContainer = document.getElementById('recentPurchases');
+                
+                if (loadingEl) loadingEl.style.display = 'block';
+                if (noPurchasesEl) noPurchasesEl.style.display = 'none';
+                if (purchasesContainer) purchasesContainer.innerHTML = '';
+                
+                try {
+                    if (window.App && window.App.safeFetch) {
+                        const history = await window.App.safeFetch(`${window.App.API_BASE_URL}/api/user/history?limit=5`);
+                        
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        
+                        if (history && history.purchases && history.purchases.length > 0) {
+                            displayRecentPurchases(history.purchases);
+                        } else {
+                            if (noPurchasesEl) noPurchasesEl.style.display = 'block';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading recent purchases:', error);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (noPurchasesEl) noPurchasesEl.style.display = 'block';
+                }
+            }
+            
+            // Отображение последних покупок
+            function displayRecentPurchases(purchases) {
+                const container = document.getElementById('recentPurchases');
+                if (!container) return;
+                
+                purchases.forEach(purchase => {
+                    const purchaseEl = document.createElement('div');
+                    purchaseEl.className = 'purchase-item';
+                    purchaseEl.style.cssText = `
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 15px;
+                        border-bottom: 1px solid #2d3748;
+                    `;
+                    
+                    const date = new Date(purchase.created_at);
+                    const formattedDate = date.toLocaleDateString('ru-RU');
+                    
+                    purchaseEl.innerHTML = `
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: #ffffff;">${purchase.product_name}</h4>
+                            <p style="margin: 0; color: #8a9bb2; font-size: 0.9rem;">${formattedDate}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: #e94560; font-weight: bold; font-size: 1.2rem;">${purchase.price} ₽</div>
+                            <span class="status-badge ${getStatusClass(purchase.status)}">
+                                ${getStatusText(purchase.status)}
+                            </span>
+                        </div>
+                    `;
+                    
+                    container.appendChild(purchaseEl);
+                });
+            }
+            
+            // Вспомогательные функции для статусов
+            function getStatusClass(status) {
+                switch (status) {
+                    case 'completed': return 'status-completed';
+                    case 'pending': return 'status-pending';
+                    case 'failed': return 'status-failed';
+                    default: return '';
+                }
+            }
+            
+            function getStatusText(status) {
+                switch (status) {
+                    case 'completed': return 'Выполнено';
+                    case 'pending': return 'Ожидание';
+                    case 'failed': return 'Ошибка';
+                    default: return status;
+                }
+            }
+            
+            // Настройка обработчиков событий
+            function setupEventHandlers() {
+                // Сохранение профиля
+                const profileForm = document.getElementById('profileForm');
+                if (profileForm) {
+                    profileForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        // Проверка honeypot
+                        const botCheck = document.getElementById('profile_bot_check');
+                        if (botCheck && botCheck.value && botCheck.value.trim() !== '') {
+                            console.warn('Honeypot field filled in profile form');
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Обнаружена подозрительная активность', 'error');
+                            }
+                            return;
+                        }
+                        
+                        const gameNickname = document.getElementById('profileGameNickname').value.trim();
+                        const gameServer = document.getElementById('profileGameServer').value;
+                        
+                        // Валидация ника
+                        if (gameNickname && window.Validation) {
+                            const nicknameValidation = window.Validation.validateMinecraftUsername(gameNickname);
+                            if (!nicknameValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(nicknameValidation.error, 'error');
+                                }
+                                return;
+                            }
+                        }
+                        
+                        try {
+                            if (window.App && window.App.safeFetch) {
+                                const response = await window.App.safeFetch(`${window.App.API_BASE_URL}/api/user/profile`, {
+                                    method: 'PUT',
+                                    body: JSON.stringify({
+                                        gameNickname,
+                                        gameServer
+                                    })
+                                });
+                                
+                                if (response) {
+                                    if (window.App && window.App.showNotification) {
+                                        window.App.showNotification('Профиль успешно обновлен', 'success');
+                                    }
+                                    
+                                    // Обновляем оригинальные данные
+                                    originalData = { gameNickname, gameServer };
+                                    isEditing = false;
+                                    
+                                    // Перезагружаем профиль
+                                    await loadProfile();
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error updating profile:', error);
+                        }
+                    });
+                }
+                
+                // Отмена изменений
+                const cancelBtn = document.getElementById('cancelChanges');
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', function() {
+                        const nicknameInput = document.getElementById('profileGameNickname');
+                        const serverSelect = document.getElementById('profileGameServer');
+                        
+                        if (nicknameInput) nicknameInput.value = originalData.gameNickname;
+                        if (serverSelect) serverSelect.value = originalData.gameServer;
+                        
+                        isEditing = false;
+                    });
+                }
+                
+                // Смена пароля
+                const changePasswordBtn = document.getElementById('changePassword');
+                const passwordModal = document.getElementById('passwordModal');
+                const closePasswordModal = document.getElementById('closePasswordModal');
+                const cancelPasswordChange = document.getElementById('cancelPasswordChange');
+                
+                if (changePasswordBtn && passwordModal) {
+                    changePasswordBtn.addEventListener('click', function() {
+                        passwordModal.classList.add('show');
+                    });
+                }
+                
+                if (closePasswordModal && passwordModal) {
+                    closePasswordModal.addEventListener('click', function() {
+                        passwordModal.classList.remove('show');
+                    });
+                }
+                
+                if (cancelPasswordChange && passwordModal) {
+                    cancelPasswordChange.addEventListener('click', function() {
+                        passwordModal.classList.remove('show');
+                    });
+                }
+                
+                // Обработка формы смены пароля
+                const passwordForm = document.getElementById('passwordForm');
+                if (passwordForm) {
+                    passwordForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        // Проверка honeypot
+                        const botCheck = document.getElementById('password_bot_check');
+                        if (botCheck && botCheck.value && botCheck.value.trim() !== '') {
+                            console.warn('Honeypot field filled in password form');
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Обнаружена подозрительная активность', 'error');
+                            }
+                            return;
+                        }
+                        
+                        const currentPassword = document.getElementById('currentPassword').value;
+                        const newPassword = document.getElementById('newPassword').value;
+                        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+                        
+                        // Валидация
+                        if (!currentPassword || !newPassword || !confirmNewPassword) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Заполните все поля', 'error');
+                            }
+                            return;
+                        }
+                        
+                        if (newPassword !== confirmNewPassword) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Новые пароли не совпадают', 'error');
+                            }
+                            return;
+                        }
+                        
+                        if (window.Validation) {
+                            const passwordValidation = window.Validation.validatePassword(newPassword);
+                            if (!passwordValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(passwordValidation.errors, 'error');
+                                }
+                                return;
+                            }
+                        }
+                        
+                        // В реальном приложении здесь был бы запрос на смену пароля
+                        // В демо-версии просто показываем уведомление
+                        if (window.App && window.App.showNotification) {
+                            window.App.showNotification(
+                                'Запрос на смену пароля отправлен (в демо-версии не работает)',
+                                'info'
+                            );
+                        }
+                        
+                        // Закрываем модальное окно
+                        if (passwordModal) {
+                            passwordModal.classList.remove('show');
+                        }
+                        
+                        // Очищаем форму
+                        passwordForm.reset();
+                    });
+                }
+                
+                // Подтверждение email (демо)
+                const verifyEmailBtn = document.getElementById('verifyEmail');
+                if (verifyEmailBtn) {
+                    verifyEmailBtn.addEventListener('click', function() {
+                        if (window.App && window.App.showNotification) {
+                            window.App.showNotification(
+                                'Ссылка для подтверждения email отправлена (в демо-версии не работает)',
+                                'info'
+                            );
+                        }
+                    });
+                }
+                
+                // Включение/выключение 2FA (демо)
+                const toggle2FABtn = document.getElementById('toggle2FA');
+                if (toggle2FABtn) {
+                    toggle2FABtn.addEventListener('click', function() {
+                        if (window.App && window.App.showNotification) {
+                            window.App.showNotification(
+                                'Настройка двухфакторной аутентификации (в демо-версии не работает)',
+                                'info'
+                            );
+                        }
+                    });
+                }
+                
+                // Переключение видимости пароля
+                document.querySelectorAll('.toggle-password').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+                        const input = document.getElementById(targetId);
+                        const icon = this.querySelector('i');
+                        
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    });
+                });
+            }
+            
+            // Валидация пароля
+            function setupPasswordValidation() {
+                const newPasswordInput = document.getElementById('newPassword');
+                if (newPasswordInput) {
+                    newPasswordInput.addEventListener('input', function() {
+                        const password = this.value;
+                        const requirements = {
+                            length: document.getElementById('new-req-length'),
+                            uppercase: document.getElementById('new-req-uppercase'),
+                            lowercase: document.getElementById('new-req-lowercase'),
+                            number: document.getElementById('new-req-number'),
+                            special: document.getElementById('new-req-special')
+                        };
+                        
+                        // Проверка длины
+                        if (password.length >= 8) {
+                            requirements.length.style.color = '#28a745';
+                            requirements.length.innerHTML = '<i class="fas fa-check"></i> Минимум 8 символов';
+                        } else {
+                            requirements.length.style.color = '#dc3545';
+                            requirements.length.innerHTML = '<i class="fas fa-times"></i> Минимум 8 символов';
+                        }
+                        
+                        // Проверка заглавных букв
+                        if (/[A-Z]/.test(password)) {
+                            requirements.uppercase.style.color = '#28a745';
+                            requirements.uppercase.innerHTML = '<i class="fas fa-check"></i> Заглавную букву';
+                        } else {
+                            requirements.uppercase.style.color = '#dc3545';
+                            requirements.uppercase.innerHTML = '<i class="fas fa-times"></i> Заглавную букву';
+                        }
+                        
+                        // Проверка строчных букв
+                        if (/[a-z]/.test(password)) {
+                            requirements.lowercase.style.color = '#28a745';
+                            requirements.lowercase.innerHTML = '<i class="fas fa-check"></i> Строчную букву';
+                        } else {
+                            requirements.lowercase.style.color = '#dc3545';
+                            requirements.lowercase.innerHTML = '<i class="fas fa-times"></i> Строчную букву';
+                        }
+                        
+                        // Проверка цифр
+                        if (/\d/.test(password)) {
+                            requirements.number.style.color = '#28a745';
+                            requirements.number.innerHTML = '<i class="fas fa-check"></i> Цифру';
+                        } else {
+                            requirements.number.style.color = '#dc3545';
+                            requirements.number.innerHTML = '<i class="fas fa-times"></i> Цифру';
+                        }
+                        
+                        // Проверка спецсимволов
+                        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+                            requirements.special.style.color = '#28a745';
+                            requirements.special.innerHTML = '<i class="fas fa-check"></i> Специальный символ';
+                        } else {
+                            requirements.special.style.color = '#dc3545';
+                            requirements.special.innerHTML = '<i class="fas fa-times"></i> Специальный символ';
+                        }
+                    });
+                }
+            }
+            
+            // Обновление формы при изменении
+            document.addEventListener('input', function(e) {
+                if (e.target.matches('#profileGameNickname, #profileGameServer')) {
+                    const nicknameInput = document.getElementById('profileGameNickname');
+                    const serverSelect = document.getElementById('profileGameServer');
+                    
+                    if (nicknameInput && serverSelect) {
+                        const currentNickname = nicknameInput.value.trim();
+                        const currentServer = serverSelect.value;
+                        
+                        const hasChanges = 
+                            currentNickname !== originalData.gameNickname ||
+                            currentServer !== originalData.gameServer;
+                        
+                        isEditing = hasChanges;
+                    }
+                }
+            });
+        })();
+    </script>
+    
+    <style>
+        /* Дополнительные стили для страницы профиля */
+        .profile-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .profile-badges .badge {
+            background: var(--bg-light);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn-link {
+            color: var(--highlight-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+        
+        .security-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-dark);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .security-info h4 {
+            margin: 0 0 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .security-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .purchase-item:last-child {
+            border-bottom: none !important;
+        }
+        
+        .loading-spinner-small {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--highlight-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .mt-2 { margin-top: 10px; }
+        .mt-3 { margin-top: 15px; }
+        .mt-4 { margin-top: 20px; }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .password-requirements {
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--bg-dark);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .password-requirements ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</body>
+</html>

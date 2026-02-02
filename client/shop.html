@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - Minecraft Сервер</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Preload -->
+    <link rel="preload" href="js/validation.js" as="script">
+    <link rel="preload" href="js/app.js" as="script">
+    <link rel="preload" href="js/shop.js" as="script">
+</head>
+<body class="no-copy">
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-cube"></i>
+                    <h1>Minecraft Сервер</h1>
+                </a>
+                
+                <div class="header-actions">
+                    <div class="server-ip" id="copyIp">
+                        <i class="fas fa-server"></i>
+                        <span>play.myserver.com</span>
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <i class="fas fa-user"></i>
+                            <span id="userBtnText">Войти</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        
+                        <div class="dropdown-menu" id="userDropdown">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Профиль</span>
+                            </a>
+                            <a href="history.html" class="dropdown-item">
+                                <i class="fas fa-history"></i>
+                                <span>История покупок</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logoutLink">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Выйти</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Главная</span>
+                </a>
+                <a href="shop.html" class="nav-link active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Магазин</span>
+                </a>
+                <a href="index.html#stats" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Статистика</span>
+                </a>
+                <a href="index.html#rules" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Правила</span>
+                </a>
+                <a href="index.html#support" class="nav-link">
+                    <i class="fas fa-headset"></i>
+                    <span>Поддержка</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>🎮 Донат Магазин</h1>
+                    <p>Улучшите свой игровой опыт с эксклюзивными привилегиями, наборами и внутриигровой валютой</p>
+                    
+                    <div class="hero-actions">
+                        <a href="#products" class="btn-primary btn-large">
+                            <i class="fas fa-gem"></i>
+                            <span>Смотреть товары</span>
+                        </a>
+                        <button class="btn-secondary btn-large" id="howToBuy">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Как купить?</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters" id="filters">
+            <div class="container">
+                <div class="filter-group">
+                    <button class="tab-btn active" data-category="all">
+                        <i class="fas fa-th"></i>
+                        <span>Все товары</span>
+                    </button>
+                    <button class="tab-btn" data-category="ranks">
+                        <i class="fas fa-crown"></i>
+                        <span>Ранги</span>
+                    </button>
+                    <button class="tab-btn" data-category="currency">
+                        <i class="fas fa-coins"></i>
+                        <span>Монеты</span>
+                    </button>
+                    <button class="tab-btn" data-category="kits">
+                        <i class="fas fa-box-open"></i>
+                        <span>Наборы</span>
+                    </button>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchProducts" placeholder="Поиск товаров..." autocomplete="off">
+                    </div>
+                    
+                    <select class="sort-select" id="sortProducts">
+                        <option value="popular">По популярности</option>
+                        <option value="price-low">Цена: по возрастанию</option>
+                        <option value="price-high">Цена: по убыванию</option>
+                        <option value="name-asc">Название: А-Я</option>
+                        <option value="name-desc">Название: Я-А</option>
+                        <option value="new">Сначала новые</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products -->
+        <section class="products" id="products">
+            <div class="container">
+                <div id="productsLoading" class="loading" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p>Загрузка товаров...</p>
+                </div>
+                
+                <div id="noProducts" style="display: none; text-align: center; padding: 50px;">
+                    <i class="fas fa-box-open" style="font-size: 4rem; color: #8a9bb2; margin-bottom: 20px;"></i>
+                    <h3>Товары не найдены</h3>
+                    <p>Попробуйте изменить фильтры поиска</p>
+                </div>
+                
+                <div class="products-container" id="productsContainer">
+                    <!-- Товары будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Badges -->
+        <section class="security-badges">
+            <div class="container">
+                <h2 class="section-title">🔒 Безопасные покупки</h2>
+                <div class="badges-grid">
+                    <div class="badge-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Защита SSL</span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fas fa-lock"></i>
+                        <span>Безопасные платежи</span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Мгновенная выдача</span>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fas fa-headset"></i>
+                        <span>Поддержка 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq">
+            <div class="container">
+                <h2 class="section-title">❓ Частые вопросы</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>Как происходит выдача товара?</h3>
+                        <p>Товар выдается автоматически в течение 1-5 минут после успешной оплаты. Вы получите уведомление в игре и на email.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Можно ли вернуть товар?</h3>
+                        <p>Возврат возможен в течение 24 часов при технических проблемах с выдачей. Обратитесь в поддержку.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Безопасны ли платежи?</h3>
+                        <p>Все платежи проходят через защищенный шлюз UnitPay. Мы не храним данные ваших карт.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Как связаться с поддержкой?</h3>
+                        <p>Напишите в дискорд сервера или на почту support@myserver.com. Отвечаем в течение 30 минут.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Purchase Modal -->
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Оформление покупки</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            
+            <form id="purchaseForm">
+                <div class="modal-body">
+                    <div class="purchase-summary">
+                        <div class="purchase-item">
+                            <div class="purchase-icon">
+                                <i id="modalProductIcon"></i>
+                            </div>
+                            <div class="purchase-details">
+                                <h4 id="modalProductName"></h4>
+                                <p id="modalProductDesc"></p>
+                                <div class="purchase-price" id="modalProductPrice"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modalUsername">
+                            <i class="fas fa-user"></i>
+                            Ваш игровой никнейм
+                        </label>
+                        <input type="text" id="modalUsername" required autocomplete="username">
+                        <small>Укажите точно так же, как в игре</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email для чека
+                        </label>
+                        <input type="email" id="email" required autocomplete="email">
+                        <small>На этот email придет чек об оплате</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentMethod">
+                            <i class="fas fa-credit-card"></i>
+                            Способ оплаты
+                        </label>
+                        <select id="paymentMethod" required>
+                            <option value="card">Банковская карта</option>
+                            <option value="sbp">СБП (Сбербанк Онлайн)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Honeypot field для защиты от ботов -->
+                    <input type="text" id="bot_check" name="bot_check" style="display: none;" autocomplete="off">
+                    
+                    <!-- СБП Банки -->
+                    <div class="sbp-banks" id="sbpBanks">
+                        <h4>Выберите ваш банк:</h4>
+                        <div class="banks-container" id="banksContainer">
+                            <!-- Банки будут загружены динамически -->
+                        </div>
+                        <input type="hidden" id="selected_bank" name="selected_bank">
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelPurchase">Отмена</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-lock"></i>
+                        Перейти к оплате
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Minecraft Сервер</h3>
+                    <p>Лучший Minecraft сервер с уникальными модами, ивентами и дружным комьюнити.</p>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <i class="fab fa-cc-visa"></i>
+                            <span>Visa</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-mastercard"></i>
+                            <span>MasterCard</span>
+                        </div>
+                        <div class="payment-method sbp">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>СБП</span>
+                        </div>
+                    </div>
+                    <div class="payment-note">
+                        <i class="fas fa-info-circle"></i>
+                        Все платежи защищены SSL шифрованием
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Главная</a></li>
+                        <li><a href="shop.html"><i class="fas fa-chevron-right"></i> Магазин</a></li>
+                        <li><a href="profile.html"><i class="fas fa-chevron-right"></i> Профиль</a></li>
+                        <li><a href="history.html"><i class="fas fa-chevron-right"></i> История покупок</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Поддержка</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://discord.gg/myserver" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i> Discord сервер
+                        </a></li>
+                        <li><a href="mailto:support@myserver.com">
+                            <i class="fas fa-envelope"></i> support@myserver.com
+                        </a></li>
+                        <li><a href="#faq">
+                            <i class="fas fa-question-circle"></i> Частые вопросы
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Minecraft Сервер. Все права защищены.
+                </div>
+                <div class="footer-links-small">
+                    <a href="#privacy">Политика конфиденциальности</a>
+                    <a href="#terms">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="js/validation.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/shop.js" defer></script>
+    
+    <!-- Inline script с безопасной обработкой -->
+    <script>
+        // Этот скрипт сработает только если основной app.js загрузился
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Как купить
+                const howToBuyBtn = document.getElementById('howToBuy');
+                if (howToBuyBtn) {
+                    howToBuyBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        if (window.App && window.App.showNotification) {
+                            window.App.showNotification(
+                                '1. Выберите товар<br>2. Нажмите "Купить"<br>3. Заполните форму<br>4. Оплатите через защищенный шлюз<br>5. Получите товар в игре!',
+                                'info'
+                            );
+                        } else {
+                            alert('1. Выберите товар\n2. Нажмите "Купить"\n3. Заполните форму\n4. Оплатите через защищенный шлюз\n5. Получите товар в игре!');
+                        }
+                    });
+                }
+                
+                // Обработка закрытия модального окна
+                const closeModal = document.getElementById('closeModal');
+                const cancelPurchase = document.getElementById('cancelPurchase');
+                const modal = document.getElementById('purchaseModal');
+                
+                if (closeModal && modal) {
+                    closeModal.addEventListener('click', function() {
+                        modal.classList.remove('show');
+                    });
+                }
+                
+                if (cancelPurchase && modal) {
+                    cancelPurchase.addEventListener('click', function() {
+                        modal.classList.remove('show');
+                    });
+                }
+                
+                if (modal) {
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === modal) {
+                            modal.classList.remove('show');
+                        }
+                    });
+                }
+                
+                // Esc для закрытия модального окна
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
+                        modal.classList.remove('show');
+                    }
+                });
+                
+                // Показать предупреждение если не авторизован
+                const checkAuthInterval = setInterval(function() {
+                    if (window.App && window.App.checkAuth) {
+                        window.App.checkAuth().then(isAuthenticated => {
+                            const authWarning = document.createElement('div');
+                            if (!isAuthenticated && !document.getElementById('authWarning')) {
+                                authWarning.id = 'authWarning';
+                                authWarning.style.cssText = `
+                                    background: #ffc107;
+                                    color: #856404;
+                                    padding: 15px;
+                                    margin: 20px 0;
+                                    border-radius: 8px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 10px;
+                                    border-left: 4px solid #ffc107;
+                                `;
+                                
+                                const icon = document.createElement('i');
+                                icon.className = 'fas fa-exclamation-triangle';
+                                
+                                const text = document.createElement('span');
+                                text.textContent = 'Для покупки товаров необходимо войти в систему. ';
+                                
+                                const link = document.createElement('a');
+                                link.href = 'login.html';
+                                link.textContent = 'Войти';
+                                link.style.cssText = 'color: #856404; font-weight: bold; text-decoration: underline;';
+                                
+                                text.appendChild(link);
+                                
+                                authWarning.appendChild(icon);
+                                authWarning.appendChild(text);
+                                
+                                const filtersSection = document.getElementById('filters');
+                                if (filtersSection) {
+                                    filtersSection.parentNode.insertBefore(authWarning, filtersSection);
+                                }
+                            }
+                        });
+                        clearInterval(checkAuthInterval);
+                    }
+                }, 100);
+            });
+        })();
+    </script>
+</body>
+</html>

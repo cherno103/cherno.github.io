@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Minecraft Сервер</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Preload -->
+    <link rel="preload" href="js/validation.js" as="script">
+    <link rel="preload" href="js/app.js" as="script">
+</head>
+<body class="no-copy">
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-cube"></i>
+                    <h1>Minecraft Сервер</h1>
+                </a>
+                
+                <div class="header-actions">
+                    <div class="server-ip" id="copyIp">
+                        <i class="fas fa-server"></i>
+                        <span>play.myserver.com</span>
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <a href="index.html" class="btn-secondary">
+                            <i class="fas fa-home"></i>
+                            <span>На главную</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="auth-container">
+            <div class="auth-card">
+                <!-- Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="loginTab">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Вход
+                    </button>
+                    <button class="auth-tab" id="registerTab">
+                        <i class="fas fa-user-plus"></i>
+                        Регистрация
+                    </button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginFormEl" class="auth-form active">
+                    <h2>Вход в аккаунт</h2>
+                    
+                    <div class="form-group">
+                        <label for="loginEmail">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input type="email" id="loginEmail" required autocomplete="email" placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">
+                            <i class="fas fa-lock"></i>
+                            Пароль
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Введите пароль">
+                            <button type="button" class="toggle-password" data-target="loginPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" style="display: none;"></div>
+                    </div>
+                    
+                    <!-- Honeypot field -->
+                    <input type="text" id="login_bot_check" name="login_bot_check" style="display: none;" autocomplete="off">
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Запомнить меня</span>
+                        </label>
+                        <a href="#forgot" id="forgotPassword">Забыли пароль?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Войти
+                    </button>
+                    
+                    <div class="auth-divider">
+                        <span>или</span>
+                    </div>
+                    
+                    <a href="shop.html" class="btn-secondary btn-block">
+                        <i class="fas fa-shopping-cart"></i>
+                        Продолжить без входа
+                    </a>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerFormEl" class="auth-form">
+                    <h2>Регистрация</h2>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input type="email" id="registerEmail" required autocomplete="email" placeholder="your@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">
+                            <i class="fas fa-lock"></i>
+                            Пароль
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="registerPassword" required autocomplete="new-password" placeholder="Придумайте пароль">
+                            <button type="button" class="toggle-password" data-target="registerPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-requirements">
+                            <small>Пароль должен содержать:</small>
+                            <ul>
+                                <li id="req-length">Минимум 8 символов</li>
+                                <li id="req-uppercase">Заглавную букву</li>
+                                <li id="req-lowercase">Строчную букву</li>
+                                <li id="req-number">Цифру</li>
+                                <li id="req-special">Специальный символ</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">
+                            <i class="fas fa-lock"></i>
+                            Подтверждение пароля
+                        </label>
+                        <div class="password-input">
+                            <input type="password" id="registerConfirmPassword" required autocomplete="new-password" placeholder="Повторите пароль">
+                            <button type="button" class="toggle-password" data-target="registerConfirmPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gameNickname">
+                            <i class="fas fa-gamepad"></i>
+                            Игровой никнейм (опционально)
+                        </label>
+                        <input type="text" id="gameNickname" autocomplete="nickname" placeholder="Ваш ник в Minecraft">
+                        <small>Если не укажете сейчас, можно будет добавить позже</small>
+                    </div>
+                    
+                    <!-- Honeypot field -->
+                    <input type="text" id="register_bot_check" name="register_bot_check" style="display: none;" autocomplete="off">
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="acceptTerms" required>
+                            <span>Я принимаю <a href="#terms">условия использования</a> и <a href="#privacy">политику конфиденциальности</a></span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-block">
+                        <i class="fas fa-user-plus"></i>
+                        Зарегистрироваться
+                    </button>
+                </form>
+                
+                <!-- Forgot Password Form -->
+                <form id="forgotFormEl" class="auth-form">
+                    <h2>Восстановление пароля</h2>
+                    
+                    <div class="form-group">
+                        <label for="forgotEmail">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input type="email" id="forgotEmail" required autocomplete="email" placeholder="your@email.com">
+                        <small>На этот email будет отправлена ссылка для сброса пароля</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="backToLogin">
+                            <i class="fas fa-arrow-left"></i>
+                            Назад
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Отправить
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="auth-links">
+                <p>Вернуться на <a href="index.html">главную страницу</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Minecraft Сервер</h3>
+                    <p>Лучший Minecraft сервер с уникальными модами, ивентами и дружным комьюнити.</p>
+                    <div class="security-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Все данные защищены шифрованием
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Безопасность</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">
+                            <i class="fas fa-lock"></i> SSL шифрование
+                        </a></li>
+                        <li><a href="#">
+                            <i class="fas fa-user-shield"></i> Защита данных
+                        </a></li>
+                        <li><a href="#">
+                            <i class="fas fa-shield-alt"></i> Безопасные платежи
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Поддержка</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://discord.gg/myserver" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-discord"></i> Discord сервер
+                        </a></li>
+                        <li><a href="mailto:support@myserver.com">
+                            <i class="fas fa-envelope"></i> support@myserver.com
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2024 Minecraft Сервер. Все права защищены.
+                </div>
+                <div class="footer-links-small">
+                    <a href="#privacy">Политика конфиденциальности</a>
+                    <a href="#terms">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="js/validation.js" defer></script>
+    <script src="js/app.js" defer></script>
+    
+    <!-- Inline script для обработки форм -->
+    <script>
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Переключение между формами
+                const loginTab = document.getElementById('loginTab');
+                const registerTab = document.getElementById('registerTab');
+                const loginForm = document.getElementById('loginFormEl');
+                const registerForm = document.getElementById('registerFormEl');
+                const forgotForm = document.getElementById('forgotFormEl');
+                const forgotPasswordLink = document.getElementById('forgotPassword');
+                const backToLoginBtn = document.getElementById('backToLogin');
+                
+                // Переключение на вход
+                if (loginTab && loginForm) {
+                    loginTab.addEventListener('click', function() {
+                        loginTab.classList.add('active');
+                        registerTab.classList.remove('active');
+                        loginForm.classList.add('active');
+                        registerForm.classList.remove('active');
+                        forgotForm.classList.remove('active');
+                    });
+                }
+                
+                // Переключение на регистрацию
+                if (registerTab && registerForm) {
+                    registerTab.addEventListener('click', function() {
+                        registerTab.classList.add('active');
+                        loginTab.classList.remove('active');
+                        registerForm.classList.add('active');
+                        loginForm.classList.remove('active');
+                        forgotForm.classList.remove('active');
+                    });
+                }
+                
+                // Переключение на восстановление пароля
+                if (forgotPasswordLink && forgotForm) {
+                    forgotPasswordLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        loginTab.classList.remove('active');
+                        registerTab.classList.remove('active');
+                        loginForm.classList.remove('active');
+                        registerForm.classList.remove('active');
+                        forgotForm.classList.add('active');
+                    });
+                }
+                
+                // Возврат ко входу
+                if (backToLoginBtn && loginForm) {
+                    backToLoginBtn.addEventListener('click', function() {
+                        loginTab.classList.add('active');
+                        registerTab.classList.remove('active');
+                        loginForm.classList.add('active');
+                        registerForm.classList.remove('active');
+                        forgotForm.classList.remove('active');
+                    });
+                }
+                
+                // Переключение видимости пароля
+                document.querySelectorAll('.toggle-password').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+                        const input = document.getElementById(targetId);
+                        const icon = this.querySelector('i');
+                        
+                        if (input.type === 'password') {
+                            input.type = 'text';
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            input.type = 'password';
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    });
+                });
+                
+                // Валидация пароля при вводе
+                const passwordInput = document.getElementById('registerPassword');
+                if (passwordInput) {
+                    passwordInput.addEventListener('input', function() {
+                        const password = this.value;
+                        const requirements = {
+                            length: document.getElementById('req-length'),
+                            uppercase: document.getElementById('req-uppercase'),
+                            lowercase: document.getElementById('req-lowercase'),
+                            number: document.getElementById('req-number'),
+                            special: document.getElementById('req-special')
+                        };
+                        
+                        // Проверка длины
+                        if (password.length >= 8) {
+                            requirements.length.style.color = '#28a745';
+                            requirements.length.innerHTML = '<i class="fas fa-check"></i> Минимум 8 символов';
+                        } else {
+                            requirements.length.style.color = '#dc3545';
+                            requirements.length.innerHTML = '<i class="fas fa-times"></i> Минимум 8 символов';
+                        }
+                        
+                        // Проверка заглавных букв
+                        if (/[A-Z]/.test(password)) {
+                            requirements.uppercase.style.color = '#28a745';
+                            requirements.uppercase.innerHTML = '<i class="fas fa-check"></i> Заглавную букву';
+                        } else {
+                            requirements.uppercase.style.color = '#dc3545';
+                            requirements.uppercase.innerHTML = '<i class="fas fa-times"></i> Заглавную букву';
+                        }
+                        
+                        // Проверка строчных букв
+                        if (/[a-z]/.test(password)) {
+                            requirements.lowercase.style.color = '#28a745';
+                            requirements.lowercase.innerHTML = '<i class="fas fa-check"></i> Строчную букву';
+                        } else {
+                            requirements.lowercase.style.color = '#dc3545';
+                            requirements.lowercase.innerHTML = '<i class="fas fa-times"></i> Строчную букву';
+                        }
+                        
+                        // Проверка цифр
+                        if (/\d/.test(password)) {
+                            requirements.number.style.color = '#28a745';
+                            requirements.number.innerHTML = '<i class="fas fa-check"></i> Цифру';
+                        } else {
+                            requirements.number.style.color = '#dc3545';
+                            requirements.number.innerHTML = '<i class="fas fa-times"></i> Цифру';
+                        }
+                        
+                        // Проверка спецсимволов
+                        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+                            requirements.special.style.color = '#28a745';
+                            requirements.special.innerHTML = '<i class="fas fa-check"></i> Специальный символ';
+                        } else {
+                            requirements.special.style.color = '#dc3545';
+                            requirements.special.innerHTML = '<i class="fas fa-times"></i> Специальный символ';
+                        }
+                    });
+                }
+                
+                // Обработка формы входа
+                const loginFormEl = document.getElementById('loginFormEl');
+                if (loginFormEl) {
+                    loginFormEl.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        // Проверка honeypot
+                        const botCheck = document.getElementById('login_bot_check');
+                        if (botCheck && botCheck.value && botCheck.value.trim() !== '') {
+                            console.warn('Honeypot field filled in login form');
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Обнаружена подозрительная активность', 'error');
+                            }
+                            return;
+                        }
+                        
+                        const email = document.getElementById('loginEmail').value.trim();
+                        const password = document.getElementById('loginPassword').value;
+                        const rememberMe = document.getElementById('rememberMe').checked;
+                        
+                        // Базовая валидация
+                        if (!email || !password) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Заполните все поля', 'error');
+                            }
+                            return;
+                        }
+                        
+                        // Используем валидацию из validation.js если доступна
+                        if (window.Validation) {
+                            const emailValidation = window.Validation.validateEmail(email);
+                            if (!emailValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(emailValidation.error, 'error');
+                                }
+                                return;
+                            }
+                        }
+                        
+                        // Отправка запроса через App.safeFetch
+                        if (window.App && window.App.safeFetch) {
+                            try {
+                                const response = await window.App.safeFetch(`${window.App.API_BASE_URL}/api/auth/login`, {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        email,
+                                        password
+                                    })
+                                });
+                                
+                                if (response) {
+                                    if (window.App && window.App.showNotification) {
+                                        window.App.showNotification('Вход выполнен успешно!', 'success');
+                                    }
+                                    
+                                    // Редирект на предыдущую страницу или магазин
+                                    const returnUrl = sessionStorage.getItem('returnUrl');
+                                    if (returnUrl) {
+                                        sessionStorage.removeItem('returnUrl');
+                                        window.location.href = returnUrl;
+                                    } else {
+                                        window.location.href = 'shop.html';
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Login error:', error);
+                                // Ошибка уже обработана в safeFetch
+                            }
+                        } else {
+                            alert('Приложение не загрузилось. Пожалуйста, обновите страницу.');
+                        }
+                    });
+                }
+                
+                // Обработка формы регистрации
+                const registerFormEl = document.getElementById('registerFormEl');
+                if (registerFormEl) {
+                    registerFormEl.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        // Проверка honeypot
+                        const botCheck = document.getElementById('register_bot_check');
+                        if (botCheck && botCheck.value && botCheck.value.trim() !== '') {
+                            console.warn('Honeypot field filled in register form');
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Обнаружена подозрительная активность', 'error');
+                            }
+                            return;
+                        }
+                        
+                        const email = document.getElementById('registerEmail').value.trim();
+                        const password = document.getElementById('registerPassword').value;
+                        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                        const gameNickname = document.getElementById('gameNickname').value.trim();
+                        const acceptTerms = document.getElementById('acceptTerms').checked;
+                        
+                        // Базовая валидация
+                        if (!email || !password || !confirmPassword) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Заполните обязательные поля', 'error');
+                            }
+                            return;
+                        }
+                        
+                        if (!acceptTerms) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Необходимо принять условия использования', 'error');
+                            }
+                            return;
+                        }
+                        
+                        if (password !== confirmPassword) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Пароли не совпадают', 'error');
+                            }
+                            return;
+                        }
+                        
+                        // Используем валидацию
+                        if (window.Validation) {
+                            const emailValidation = window.Validation.validateEmail(email);
+                            if (!emailValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(emailValidation.error, 'error');
+                                }
+                                return;
+                            }
+                            
+                            const passwordValidation = window.Validation.validatePassword(password);
+                            if (!passwordValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(passwordValidation.errors, 'error');
+                                }
+                                return;
+                            }
+                            
+                            if (gameNickname) {
+                                const nicknameValidation = window.Validation.validateMinecraftUsername(gameNickname);
+                                if (!nicknameValidation.valid) {
+                                    if (window.App && window.App.showNotification) {
+                                        window.App.showNotification(nicknameValidation.error, 'error');
+                                    }
+                                    return;
+                                }
+                            }
+                        }
+                        
+                        // Отправка запроса
+                        if (window.App && window.App.safeFetch) {
+                            try {
+                                const response = await window.App.safeFetch(`${window.App.API_BASE_URL}/api/auth/register`, {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        email,
+                                        password,
+                                        gameNickname
+                                    })
+                                });
+                                
+                                if (response) {
+                                    if (window.App && window.App.showNotification) {
+                                        window.App.showNotification(
+                                            'Регистрация успешна! Проверьте вашу почту для подтверждения.',
+                                            'success'
+                                        );
+                                    }
+                                    
+                                    // Автоматический вход после регистрации
+                                    window.location.href = 'shop.html';
+                                }
+                            } catch (error) {
+                                console.error('Register error:', error);
+                            }
+                        }
+                    });
+                }
+                
+                // Обработка формы восстановления пароля
+                const forgotFormEl = document.getElementById('forgotFormEl');
+                if (forgotFormEl) {
+                    forgotFormEl.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        const email = document.getElementById('forgotEmail').value.trim();
+                        
+                        if (!email) {
+                            if (window.App && window.App.showNotification) {
+                                window.App.showNotification('Введите email', 'error');
+                            }
+                            return;
+                        }
+                        
+                        if (window.Validation) {
+                            const emailValidation = window.Validation.validateEmail(email);
+                            if (!emailValidation.valid) {
+                                if (window.App && window.App.showNotification) {
+                                    window.App.showNotification(emailValidation.error, 'error');
+                                }
+                                return;
+                            }
+                        }
+                        
+                        if (window.App && window.App.showNotification) {
+                            window.App.showNotification(
+                                'Ссылка для сброса пароля отправлена на ваш email (в демо-версии не работает)',
+                                'info'
+                            );
+                            
+                            // Возвращаемся к форме входа
+                            if (loginTab && loginForm) {
+                                loginTab.classList.add('active');
+                                registerTab.classList.remove('active');
+                                loginForm.classList.add('active');
+                                registerForm.classList.remove('active');
+                                forgotForm.classList.remove('active');
+                            }
+                        }
+                    });
+                }
+                
+                // Проверка авторизации при загрузке
+                if (window.App && window.App.checkAuth) {
+                    window.App.checkAuth().then(isAuthenticated => {
+                        if (isAuthenticated) {
+                            // Если уже авторизован, перенаправляем в магазин
+                            window.location.href = 'shop.html';
+                        }
+                    });
+                }
+                
+                // Автозаполнение при демо-режиме
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('demo') === 'true') {
+                    setTimeout(() => {
+                        document.getElementById('loginEmail').value = 'test@example.com';
+                        document.getElementById('loginPassword').value = 'Test123!@#';
+                    }, 500);
+                }
+            });
+        })();
+    </script>
+    
+    <style>
+        /* Дополнительные стили для страницы авторизации */
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            color: var(--highlight-color);
+            border-bottom-color: var(--highlight-color);
+            font-weight: 600;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .password-input input {
+            padding-right: 45px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .password-requirements {
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--bg-dark);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .password-requirements ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .password-requirements li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .password-requirements li i {
+            font-size: 0.8rem;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            margin: 0;
+        }
+        
+        #forgotPassword {
+            color: var(--highlight-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        #forgotPassword:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--text-secondary);
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+        
+        .auth-divider span {
+            padding: 0 15px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+</html>
