@@ -1,4 +1,4 @@
-#Minecraft Donate Shop
+# Minecraft Donate Shop
 
 Безопасный и исправленный донат-магазин для Minecraft серверов.
 
