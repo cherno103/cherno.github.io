@@ -1,3 +1,7 @@
+---
+permalink: /index.html
+---
+
 # 🎮 Minecraft Donate Shop - Исправленная Версия
 
 Безопасный и исправленный донат-магазин для Minecraft серверов.
